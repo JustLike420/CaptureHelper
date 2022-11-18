@@ -7,8 +7,8 @@ from django.utils import timezone
 
 class TeamRole(models.TextChoices):
     OWNER = "owner", "owner"
-    EDITOR = "editor", "editor"
-    VIEWER = "viewer", "viewer"
+    MODERATOR = "moderator", "moderator"
+    MEMBER = "member", "member"
 
 
 class MembershipStatus(models.TextChoices):
