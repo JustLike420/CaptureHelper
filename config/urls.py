@@ -7,6 +7,10 @@ from .yasg import urlpatterns as doc_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/team/', include('team.urls')),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.authtoken')),
+
+    # path('auth/', include('djoser.urls.jwt')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
