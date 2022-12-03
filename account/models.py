@@ -11,8 +11,13 @@ def user_directory_path(instance: 'User', filename: str) -> str:
 
 class User(AbstractUser):
     """User model override"""
-
-    email = models.EmailField(unique=True, blank=True)
+    email = models.EmailField(unique=False, blank=True, null=True)
     avatar = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
     # clan = models.ForeignKey()
-    REQUIRED_FIELDS = []
+    # REQUIRED_FIELDS = []
+    USERNAME_FIELD = "username"
+
+    def save(self, *args, **kwargs):
+        self.set_password(self.password)
+        super(User, self).save(*args, **kwargs)
+
