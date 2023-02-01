@@ -72,3 +72,14 @@ class Team(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Invitation(models.Model):
+
+    team = models.ForeignKey(Team, related_name="invitations", on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='invitations')
+    invite_status = models.CharField(max_length=100, choices=InvitationStatus.choices, default=InvitationStatus.WAITING)
+    create_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'User {self.user} - team {self.team}'
