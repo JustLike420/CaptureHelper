@@ -6,6 +6,7 @@ class UserUpdateSerializer(UserSerializer):
 
     class Meta:
         model = User
+        fields = '__all__'
 
 
 class UsersCreateSerializer(UserCreatePasswordRetypeSerializer):

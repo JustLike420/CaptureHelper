@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -8,7 +8,7 @@ from .models import Team
 
 
 class PaginationTeam(PageNumberPagination):
-    page_size = 5
+    page_size = 10
     max_page_size = 1000
 
     def get_paginated_response(self, data):
@@ -27,3 +27,5 @@ class TeamViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
     pagination_class = PaginationTeam
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
