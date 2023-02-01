@@ -7,7 +7,6 @@ from django.utils import timezone
 
 class TeamRole(models.TextChoices):
     OWNER = "owner", "owner"
-    MODERATOR = "moderator", "moderator"
     MEMBER = "member", "member"
 
 
@@ -17,29 +16,25 @@ class MembershipStatus(models.TextChoices):
     ACTIVE = "active", "active"
 
 
+class TeamSlotsStatus(models.TextChoices):
+    """Статус слотов в команду"""
+    FULL = "full", "full"
+    REC = "rec", "rec"  # rec - open for recruitment/набор открыт
+
+
 class TeamMembership(models.Model):
     ROLE = TeamRole
     MEMBERSHIP_STATUS = MembershipStatus
     ROLES_DICT = dict(TeamRole.choices)
-
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE,
+        related_name='team_members'
     )
-    # email = models.CharField(max_length=255, blank=True)
     team = models.ForeignKey("Team", on_delete=models.CASCADE)
     role = models.CharField(max_length=30, choices=TeamRole.choices)
     status = models.CharField(max_length=30, choices=MembershipStatus.choices)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user", "team"],
-                condition=models.Q(user__isnull=False),
-                name="unique_user_team",
-            )
-        ]
 
     def __str__(self):
         return "%s in %s" % (self.user, self.team)
@@ -64,8 +59,10 @@ def clan_directory_path(instance: 'Team', filename: str) -> str:
 
 class Team(models.Model):
     name = models.CharField(max_length=250)
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through=TeamMembership)
     logo = models.ImageField(upload_to=clan_directory_path, default='default/default_logo.png')
+    slots = models.CharField(max_length=30, choices=TeamSlotsStatus.choices, default=TeamSlotsStatus.FULL)
+    wins = models.IntegerField(default=0)  # кол-во соток
+    site = models.URLField(max_length=50, null=True, blank=True)  # discord server
 
     def __str__(self):
         return self.name
