@@ -6,20 +6,26 @@ from django.utils import timezone
 
 
 class TeamRole(models.TextChoices):
-    OWNER = "owner", "owner"
-    MEMBER = "member", "member"
+    OWNER = "Owner", "Владелец"
+    MEMBER = "Member", "Участник"
 
 
 class MembershipStatus(models.TextChoices):
-    INACTIVE = "inactive", "inactive"
-    INVITED = "invited", "invited"
-    ACTIVE = "active", "active"
+    INACTIVE = "Inactive", "Неактивный"
+    INVITED = "Invited", "Приглашенный"
+    ACTIVE = "Active", "Активный"
 
 
 class TeamSlotsStatus(models.TextChoices):
     """Статус слотов в команду"""
-    FULL = "full", "full"
-    REC = "rec", "rec"  # rec - open for recruitment/набор открыт
+    FULL = "Full", "Набор закрыт"
+    REC = "Rec", "Есть слоты"  # rec - open for recruitment/набор открыт
+
+
+class InvitationStatus(models.TextChoices):
+    WAITING = 'Waiting', 'В ожидании'
+    APPROVED = 'Approved', 'Одобрено'
+    REJECTED = 'Rejected', 'Отклонено'
 
 
 class TeamMembership(models.Model):
